@@ -1,16 +1,39 @@
-# notes_app
+Personal Notes App (Flutter)
 
-A new Flutter project.
+A simple Flutter application to Create, Read, Update, and Delete personal details using a REST API.
 
-## Getting Started
+Features
 
-This project is a starting point for a Flutter application.
+Add a new person with details: Full Name, Date of Birth, Gender, Qualification, Skills
 
-A few resources to get you started if this is your first Flutter project:
+View all records in a list
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Update existing records
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Delete records
+
+Form validation with age restriction (13–80 years)
+
+Optional: Clean and reusable components, navigation using go_router
+
+Screens
+
+Person List – View all entries, edit or delete a person
+
+Person Form – Add or update personal details
+
+API
+
+Base URL:
+https://notes-app-backend-nu-five.vercel.app/
+
+Supports standard CRUD endpoints: GET, POST, PUT, DELETE
+
+Dependencies
+
+Flutter SDK 3.35.7
+
+dio – For REST API requests
+get - State Management
+intl – Date formatting
+fluttertoast - showing Toast
