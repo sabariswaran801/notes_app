@@ -1,12 +1,17 @@
 import 'dart:developer';
 
+import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/Models/PersonModel.dart';
 import 'package:notes_app/Services/ApiServices.dart';
 
 class FormController extends GetxController {
   final ApiService apiService = ApiService();
-
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+  RxString gender = 'Male'.obs;
+  RxString? qualification = "".obs;
   var isLoading = false.obs;
   RxList<PersonModel> personData = <PersonModel>[].obs;
 
@@ -21,7 +26,8 @@ class FormController extends GetxController {
     try {
       var response = await apiService.getAllPersonsServices();
       if (response != null) {
-        // personData.assignAll(response);
+        // log("$response");
+        personData.assignAll(response);
         isLoading.value = false;
       }
     } catch (e) {
@@ -29,48 +35,61 @@ class FormController extends GetxController {
     }
   }
 
-  Future<void> createPerson() async {
+  Future<void> createPerson(skills) async {
     isLoading.value = true;
-    var params = [
-      {"Com": "1"},
-    ];
+    var params = {
+      "fullName": nameController.text,
+      "dob": dobController.text,
+      "gender": gender.value,
+      "qualification": qualification?.value,
+      "skills": skills,
+    };
+
     try {
       var response = await apiService.createPersonServices(params);
       if (response != null) {
-        personData.assignAll(response);
+        final message = response['message'];
+        // Get.back();
+        getAllPersonList();
         isLoading.value = false;
+        Get.back();
+        Fluttertoast.showToast(msg: message);
       }
     } catch (e) {
       log("error in addPerson controller ");
     }
   }
 
-  Future<void> updatePerson() async {
-    isLoading.value = true;
-    var params = [
-      {"Com": "1"},
-    ];
+  Future<void> updatePerson(id, skills) async {
+    var params = {
+      "fullName": nameController.text,
+      "dob": dobController.text,
+      "gender": gender.value,
+      "qualification": qualification?.value,
+      "skills": skills,
+    };
     try {
-      var response = await apiService.updatePersonServices(params);
+      var response = await apiService.updatePersonServices(params, id);
       if (response != null) {
-        personData.assignAll(response);
-        isLoading.value = false;
+        final message = response['message'];
+        getAllPersonList();
+        // Get.back();
+        Get.back();
+        Fluttertoast.showToast(msg: message);
       }
     } catch (e) {
       log("error in updatePerson controller ");
     }
   }
 
-  Future<void> deletePerson() async {
-    isLoading.value = true;
-    var params = [
-      {"Com": "1"},
-    ];
+  Future<void> deletePerson(id) async {
     try {
-      var response = await apiService.deletePersonServices(params);
+      var response = await apiService.deletePersonServices(id);
       if (response != null) {
-        personData.assignAll(response);
-        isLoading.value = false;
+        final message = response['message'];
+        // Get.back();
+        getAllPersonList();
+        Fluttertoast.showToast(msg: message);
       }
     } catch (e) {
       log("error in deletePerson controller ");

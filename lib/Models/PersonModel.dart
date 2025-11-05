@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final personModel = personModelFromJson(jsonString);
-
 import 'dart:convert';
 
 List<PersonModel> personModelFromJson(String str) => List<PersonModel>.from(
@@ -14,15 +10,15 @@ String personModelToJson(List<PersonModel> data) =>
 class PersonModel {
   String id;
   String fullName;
-  String dateOfBirth;
+  String dob;
   String gender;
   String qualification;
-  List<dynamic> skills;
+  List<String> skills;
 
   PersonModel({
     required this.id,
     required this.fullName,
-    required this.dateOfBirth,
+    required this.dob,
     required this.gender,
     required this.qualification,
     required this.skills,
@@ -31,16 +27,16 @@ class PersonModel {
   factory PersonModel.fromJson(Map<String, dynamic> json) => PersonModel(
     id: json["id"],
     fullName: json["fullName"],
-    dateOfBirth: json["dateOfBirth"],
+    dob: json["dob"],
     gender: json["gender"],
     qualification: json["qualification"],
-    skills: List<dynamic>.from(json["skills"].map((x) => x)),
+    skills: List<String>.from(json["skills"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "fullName": fullName,
-    "dateOfBirth": dateOfBirth,
+    "dob": dob,
     "gender": gender,
     "qualification": qualification,
     "skills": List<dynamic>.from(skills.map((x) => x)),

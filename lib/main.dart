@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Notes - App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.indigo),
-      home: FindClassesScreen(),
+      home: PersonList(),
     );
   }
 }

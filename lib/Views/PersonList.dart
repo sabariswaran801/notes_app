@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/utils.dart';
+import 'package:get/get.dart';
+import 'package:notes_app/Controller/FromController.dart';
 import 'package:notes_app/Utils/responsive.dart';
 import 'package:notes_app/Views/FromView.dart';
 
-class FindClassesScreen extends StatefulWidget {
-  const FindClassesScreen({Key? key}) : super(key: key);
+class PersonList extends StatefulWidget {
+  const PersonList({Key? key}) : super(key: key);
 
   @override
-  State<FindClassesScreen> createState() => _FindClassesScreenState();
+  State<PersonList> createState() => _PersonListState();
 }
 
-class _FindClassesScreenState extends State<FindClassesScreen> {
+class _PersonListState extends State<PersonList> {
+  final FormController formController = Get.put(FormController());
   DateTime? selectedDate;
 
   Future<void> _pickDate() async {
@@ -26,78 +27,11 @@ class _FindClassesScreenState extends State<FindClassesScreen> {
     }
   }
 
-  final List<Map<String, dynamic>> classes = [
-    {
-      'name': 'Sabariswaran',
-      'dob': '08/12/2003',
-      'gender': 'male',
-      'qualification': 'BSc Computer Science',
-      'skills': ['React', 'Angular', 'HTML', 'CSS'],
-    },
-    {
-      'name': 'Ananya',
-      'dob': '15/03/2002',
-      'gender': 'female',
-      'qualification': 'B.Tech IT',
-      'skills': ['Flutter', 'Dart', 'Firebase'],
-    },
-    {
-      'name': 'Rohit',
-      'dob': '22/07/2001',
-      'gender': 'male',
-      'qualification': 'BCA',
-      'skills': ['Java', 'Spring Boot', 'SQL'],
-    },
-    {
-      'name': 'Priya',
-      'dob': '30/01/2003',
-      'gender': 'female',
-      'qualification': 'MCA',
-      'skills': ['Python', 'Django', 'REST API'],
-    },
-    {
-      'name': 'Arjun',
-      'dob': '12/05/2002',
-      'gender': 'male',
-      'qualification': 'BSc IT',
-      'skills': ['JavaScript', 'Node.js', 'MongoDB'],
-    },
-    {
-      'name': 'Meena',
-      'dob': '09/09/2001',
-      'gender': 'female',
-      'qualification': 'BSc CS',
-      'skills': ['C++', 'Data Structures', 'Algorithms'],
-    },
-    {
-      'name': 'Karthik',
-      'dob': '18/11/2002',
-      'gender': 'male',
-      'qualification': 'B.Tech CSE',
-      'skills': ['React Native', 'Redux', 'TypeScript'],
-    },
-    {
-      'name': 'Divya',
-      'dob': '25/04/2003',
-      'gender': 'female',
-      'qualification': 'BSc IT',
-      'skills': ['Flutter', 'GetX', 'Hive'],
-    },
-    {
-      'name': 'Vignesh',
-      'dob': '05/02/2001',
-      'gender': 'male',
-      'qualification': 'BCA',
-      'skills': ['Angular', 'Node.js', 'Express'],
-    },
-    {
-      'name': 'Shalini',
-      'dob': '17/08/2002',
-      'gender': 'female',
-      'qualification': 'BSc Computer Science',
-      'skills': ['Python', 'Machine Learning', 'Pandas'],
-    },
-  ];
+  @override
+  void initState() {
+    formController.getAllPersonList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +40,8 @@ class _FindClassesScreenState extends State<FindClassesScreen> {
         width: 15.0.wp,
         height: 8.0.hp,
         child: FloatingActionButton(
-          shape: CircleBorder(),
-          onPressed: () {
-            Get.to(() => FormScreen());
-          },
+          shape: const CircleBorder(),
+          onPressed: () => Get.to(() => FormScreen()),
           backgroundColor: Colors.red,
           child: const Icon(Icons.add, color: Colors.white),
         ),
@@ -127,12 +59,12 @@ class _FindClassesScreenState extends State<FindClassesScreen> {
               height: 30.0.hp,
               width: 100.0.wp,
               decoration: const BoxDecoration(
-                color: Color(0xFFE53935),
-                image: DecorationImage(
-                  image: AssetImage('assets/images/s.png'),
-                  fit: BoxFit.cover,
-                  opacity: 0.2,
-                ),
+                // color: Color(0xFFE53935),
+                // image: DecorationImage(
+                //   image: AssetImage('assets/images/s.png'),
+                //   fit: BoxFit.cover,
+                //   opacity: 0.2,
+                // ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,42 +141,44 @@ class _FindClassesScreenState extends State<FindClassesScreen> {
             ),
           ),
           SizedBox(height: 2.0.hp),
-          // // List Title
-          // Align(
-          //   alignment: Alignment.topLeft,
-          //   child: Padding(
-          //     padding: EdgeInsets.only(left: 4.0.wp),
-          //     child: Text(
-          //       "List",
-          //       style: TextStyle(fontSize: 7.0.sp, fontWeight: FontWeight.bold),
-          //     ),
-          //   ),
-          // ),
-          // SizedBox(height: 1.0.hp),
           Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.symmetric(
-                vertical: 2.0.hp,
-                horizontal: 2.0.wp,
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.9,
-              ),
-              itemCount: classes.length,
-              itemBuilder: (context, index) {
-                final cls = classes[index];
-                return classCard(
-                  cls['name'],
-                  cls['dob'],
-                  cls['gender'],
-                  cls['qualification'],
-                  cls['skills'],
+            child: Obx(() {
+              final personList = formController.personData;
+              if (formController.isLoading.value) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.red),
                 );
-              },
-            ),
+              }
+              if (personList.isEmpty) {
+                return Center(child: Text("No Records Found"));
+              }
+              return ListView.builder(
+                itemCount: personList.length,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 3.0.wp,
+                  vertical: 2.0.hp,
+                ),
+                itemBuilder: (context, index) {
+                  final data = personList[index];
+                  return InkWell(
+                    onTap: () {
+                      Get.to(() => FormScreen(personModel: data));
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 2.0.hp),
+                      child: classCard(
+                        data.id,
+                        data.fullName,
+                        data.dob,
+                        data.gender,
+                        data.qualification,
+                        data.skills,
+                      ),
+                    ),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
@@ -252,6 +186,7 @@ class _FindClassesScreenState extends State<FindClassesScreen> {
   }
 
   Widget classCard(
+    String id,
     String name,
     String dob,
     String gender,
@@ -270,15 +205,26 @@ class _FindClassesScreenState extends State<FindClassesScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 10.0.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 10.0.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  formController.deletePerson(id);
+                },
+                icon: Icon(Icons.delete, color: Colors.red, size: 3.0.wp),
+              ),
+            ],
           ),
-          SizedBox(height: 0.5.hp),
+          // SizedBox(height: 0.5.hp),
           Text(
             "DOB: $dob | Gender: $gender",
             style: TextStyle(fontSize: 7.0.sp, color: Colors.grey[600]),
@@ -294,47 +240,30 @@ class _FindClassesScreenState extends State<FindClassesScreen> {
             style: TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 0.5.hp),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Wrap(
-                spacing: 4.0,
-                runSpacing: 4.0,
-                children: skills
-                    .map<Widget>(
-                      (skill) => Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade100,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          skill,
-                          style: TextStyle(
-                            fontSize: 8.0.sp,
-                            color: Colors.red.shade900,
-                          ),
-                        ),
+          Wrap(
+            spacing: 4.0,
+            runSpacing: 4.0,
+            children: skills
+                .map<Widget>(
+                  (skill) => Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      skill,
+                      style: TextStyle(
+                        fontSize: 8.0.sp,
+                        color: Colors.red.shade900,
                       ),
-                    )
-                    .toList(),
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  color: Colors.grey,
-                  size: 5.0.wp,
-                ),
-                onPressed: () {},
-              ),
-            ],
+                    ),
+                  ),
+                )
+                .toList(),
           ),
         ],
       ),

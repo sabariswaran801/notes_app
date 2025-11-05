@@ -11,11 +11,9 @@ class ApiService {
 
   Future<List<PersonModel>?> getAllPersonsServices() async {
     try {
-      final res = await networkService.getApiConnection(
-        url: ApiUrl.formEndpoint,
-      );
-      log(res);
-      // return personModelFromJson(jsonEncode(res));
+      dynamic res = await networkService.getApiConnection(url: "");
+      // log("wfsdgfdg$res");
+      return personModelFromJson(jsonEncode(res));
     } catch (e) {
       log("getAllPersonsServices $e");
       rethrow;
@@ -27,7 +25,7 @@ class ApiService {
   ) async {
     try {
       dynamic res = await networkService.postApiConnection(
-        url: ApiUrl.formEndpoint,
+        url: "",
         params: params,
       );
       return personModelFromJson(jsonEncode(res));
@@ -37,45 +35,37 @@ class ApiService {
     }
   }
 
-  Future<List<PersonModel>?> createPersonServices(
-    List<Map<String, dynamic>> params,
-  ) async {
+  Future<dynamic> createPersonServices(Map<String, dynamic> params) async {
     try {
       dynamic res = await networkService.postApiConnection(
-        url: ApiUrl.formEndpoint,
+        url: "",
         params: params,
       );
-      return personModelFromJson(jsonEncode(res));
+      return res;
     } catch (e) {
       log("createPersonServices $e");
       rethrow;
     }
   }
 
-  Future<List<PersonModel>?> updatePersonServices(
-    List<Map<String, dynamic>> params,
-  ) async {
+  Future<dynamic> updatePersonServices(Map<String, dynamic> params, id) async {
     try {
-      dynamic res = await networkService.postApiConnection(
-        url: ApiUrl.formEndpoint,
+      final dynamic res = await networkService.putApiConnection(
+        url: "/$id",
         params: params,
       );
-      return personModelFromJson(jsonEncode(res));
-    } catch (e) {
-      log("updatePersonServices $e");
+
+      return res;
+    } catch (e, stackTrace) {
+      log("updatePersonServices error: $e\n$stackTrace");
       rethrow;
     }
   }
 
-  Future<List<PersonModel>?> deletePersonServices(
-    List<Map<String, dynamic>> params,
-  ) async {
+  Future<dynamic> deletePersonServices(id) async {
     try {
-      dynamic res = await networkService.postApiConnection(
-        url: ApiUrl.formEndpoint,
-        params: params,
-      );
-      return personModelFromJson(jsonEncode(res));
+      dynamic res = await networkService.deleteApiConnection(url: "/$id");
+      return res;
     } catch (e) {
       log("deletePersonServices $e");
       rethrow;
