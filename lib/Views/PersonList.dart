@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/Controller/FromController.dart';
-import 'package:notes_app/Utils/responsive.dart';
 import 'package:notes_app/Views/FromView.dart';
+import 'package:sizer/sizer.dart';
 
 class PersonList extends StatefulWidget {
   const PersonList({Key? key}) : super(key: key);
@@ -15,38 +15,27 @@ class _PersonListState extends State<PersonList> {
   final FormController formController = Get.put(FormController());
   DateTime? selectedDate;
 
-  Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) {
-      setState(() => selectedDate = picked);
-    }
-  }
+  // Future<void> _pickDate() async {
+  //   final picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(2020),
+  //     lastDate: DateTime(2100),
+  //   );
+  //   if (picked != null) {
+  //     setState(() => selectedDate = picked);
+  //   }
+  // }
 
   @override
   void initState() {
-    formController.getAllPersonList();
     super.initState();
+    formController.getAllPersonList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: SizedBox(
-        width: 15.0.wp,
-        height: 8.0.hp,
-        child: FloatingActionButton(
-          shape: const CircleBorder(),
-          onPressed: () => Get.to(() => FormScreen()),
-          backgroundColor: Colors.red,
-          child: const Icon(Icons.add, color: Colors.white),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor: Colors.grey.shade100,
       body: Column(
         children: [
@@ -56,23 +45,23 @@ class _PersonListState extends State<PersonList> {
               bottomRight: Radius.circular(20.0),
             ),
             child: Container(
-              height: 30.0.hp,
-              width: 100.0.wp,
+              height: 30.0.h,
+              width: 100.0.w,
               decoration: const BoxDecoration(
-                // color: Color(0xFFE53935),
-                // image: DecorationImage(
-                //   image: AssetImage('assets/images/s.png'),
-                //   fit: BoxFit.cover,
-                //   opacity: 0.2,
-                // ),
+                color: Color(0xFFE53935),
+                image: DecorationImage(
+                  image: AssetImage('assets/images/s.png'),
+                  fit: BoxFit.cover,
+                  opacity: 0.2,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 5.0.wp,
-                      vertical: 6.0.hp,
+                      horizontal: 5.0.w,
+                      vertical: 6.0.h,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,11 +81,11 @@ class _PersonListState extends State<PersonList> {
                   const Spacer(),
                   Center(
                     child: InkWell(
-                      onTap: _pickDate,
+                      // onTap: _pickDate,
                       borderRadius: BorderRadius.circular(50),
                       child: Container(
-                        height: 7.0.hp,
-                        width: 80.0.wp,
+                        height: 7.0.h,
+                        width: 80.0.w,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.3),
@@ -112,14 +101,14 @@ class _PersonListState extends State<PersonList> {
                                   color: Colors.white,
                                   size: 20,
                                 ),
-                                SizedBox(width: 2.0.wp),
+                                SizedBox(width: 2.0.w),
                                 Text(
                                   selectedDate == null
                                       ? "Choose Date"
                                       : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 10.0.sp,
+                                    fontSize: 13.0.sp,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -135,37 +124,46 @@ class _PersonListState extends State<PersonList> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 3.0.hp),
+                  SizedBox(height: 3.0.h),
                 ],
               ),
             ),
           ),
-          SizedBox(height: 2.0.hp),
+
+          SizedBox(height: 2.0.h),
+
           Expanded(
             child: Obx(() {
-              final personList = formController.personData;
               if (formController.isLoading.value) {
                 return const Center(
                   child: CircularProgressIndicator(color: Colors.red),
                 );
               }
+
+              final personList = formController.personData;
+
               if (personList.isEmpty) {
-                return Center(child: Text("No Records Found"));
+                return const Center(
+                  child: Text(
+                    "No Records Found",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                );
               }
+
               return ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: personList.length,
                 padding: EdgeInsets.symmetric(
-                  horizontal: 3.0.wp,
-                  vertical: 2.0.hp,
+                  horizontal: 3.0.w,
+                  vertical: 2.0.h,
                 ),
                 itemBuilder: (context, index) {
                   final data = personList[index];
                   return InkWell(
-                    onTap: () {
-                      Get.to(() => FormScreen(personModel: data));
-                    },
+                    onTap: () => Get.to(() => FormScreen(personModel: data)),
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 2.0.hp),
+                      padding: EdgeInsets.only(bottom: 2.0.h),
                       child: classCard(
                         data.id,
                         data.fullName,
@@ -182,6 +180,18 @@ class _PersonListState extends State<PersonList> {
           ),
         ],
       ),
+
+      floatingActionButton: SizedBox(
+        width: 15.0.w,
+        height: 8.0.h,
+        child: FloatingActionButton(
+          shape: const CircleBorder(),
+          backgroundColor: Colors.red,
+          onPressed: () => Get.to(() => FormScreen()),
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -194,10 +204,10 @@ class _PersonListState extends State<PersonList> {
     List skills,
   ) {
     return Container(
-      padding: EdgeInsets.all(3.0.wp),
+      padding: EdgeInsets.all(3.0.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(3.0.wp),
+        borderRadius: BorderRadius.circular(3.0.w),
         boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, 3)),
         ],
@@ -208,38 +218,61 @@ class _PersonListState extends State<PersonList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: 10.0.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+              Expanded(
+                child: Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 15.0.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  formController.deletePerson(id);
+                onPressed: () async {
+                  bool? confirm = await Get.dialog(
+                    AlertDialog(
+                      title: const Text("Confirm Delete"),
+                      content: const Text(
+                        "Are you sure you want to delete this record?",
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Get.back(result: false),
+                          child: const Text("Cancel"),
+                        ),
+                        TextButton(
+                          onPressed: () => Get.back(result: true),
+                          child: const Text("Delete"),
+                        ),
+                      ],
+                    ),
+                  );
+                  if (confirm == true) {
+                    formController.deletePerson(id);
+                  }
                 },
-                icon: Icon(Icons.delete, color: Colors.red, size: 3.0.wp),
+                icon: Icon(Icons.delete, color: Colors.red, size: 4.0.w),
               ),
             ],
           ),
-          // SizedBox(height: 0.5.hp),
+
           Text(
             "DOB: $dob | Gender: $gender",
-            style: TextStyle(fontSize: 7.0.sp, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 14.0.sp, color: Colors.grey[600]),
           ),
-          SizedBox(height: 0.5.hp),
+          SizedBox(height: 0.5.h),
           Text(
             "Qualification: $qualification",
-            style: TextStyle(fontSize: 7.5.sp, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 14.0.sp, fontWeight: FontWeight.w600),
           ),
-          SizedBox(height: 0.5.hp),
+          SizedBox(height: 0.5.h),
           Text(
             "Skills:",
-            style: TextStyle(fontSize: 8.0.sp, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 14.0.sp, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 0.5.hp),
+          SizedBox(height: 0.5.h),
           Wrap(
             spacing: 4.0,
             runSpacing: 4.0,
@@ -257,7 +290,7 @@ class _PersonListState extends State<PersonList> {
                     child: Text(
                       skill,
                       style: TextStyle(
-                        fontSize: 8.0.sp,
+                        fontSize: 14.0.sp,
                         color: Colors.red.shade900,
                       ),
                     ),

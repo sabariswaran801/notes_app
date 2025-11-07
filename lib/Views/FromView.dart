@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes_app/Controller/FromController.dart';
 import 'package:notes_app/Models/PersonModel.dart';
-import 'package:notes_app/Utils/responsive.dart';
+import 'package:sizer/sizer.dart';
 
 class FormScreen extends StatefulWidget {
   final PersonModel? personModel;
@@ -102,21 +102,21 @@ class _FormScreenState extends State<FormScreen> {
         labelText: label,
         labelStyle: const TextStyle(fontWeight: FontWeight.bold),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6.0.wp),
+          borderRadius: BorderRadius.circular(6.0.w),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6.0.wp),
+          borderRadius: BorderRadius.circular(6.0.w),
           borderSide: const BorderSide(color: Colors.grey),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6.0.wp),
+          borderRadius: BorderRadius.circular(6.0.w),
           borderSide: const BorderSide(color: Colors.red),
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.0.wp)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.0.w)),
         suffixIcon: suffixIcon,
         contentPadding: EdgeInsets.symmetric(
-          horizontal: 4.0.wp,
-          vertical: 2.0.hp,
+          horizontal: 4.0.w,
+          vertical: 2.0.h,
         ),
       ),
     );
@@ -128,7 +128,7 @@ class _FormScreenState extends State<FormScreen> {
       children: [
         Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         Wrap(
-          spacing: 6.0.wp,
+          spacing: 6.0.w,
           children: options.map((option) {
             return Row(
               mainAxisSize: MainAxisSize.min,
@@ -164,20 +164,20 @@ class _FormScreenState extends State<FormScreen> {
         labelText: label,
         labelStyle: const TextStyle(fontWeight: FontWeight.bold),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6.0.wp),
+          borderRadius: BorderRadius.circular(6.0.w),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6.0.wp),
+          borderRadius: BorderRadius.circular(6.0.w),
           borderSide: const BorderSide(color: Colors.grey),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6.0.wp),
+          borderRadius: BorderRadius.circular(6.0.w),
           borderSide: const BorderSide(color: Colors.red),
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.0.wp)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.0.w)),
         contentPadding: EdgeInsets.symmetric(
-          horizontal: 4.0.wp,
-          vertical: 2.0.hp,
+          horizontal: 4.0.w,
+          vertical: 2.0.h,
         ),
       ),
       items: items

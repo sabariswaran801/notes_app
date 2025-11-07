@@ -13,7 +13,8 @@ class ApiService {
     try {
       dynamic res = await networkService.getApiConnection(url: "");
       // log("wfsdgfdg$res");
-      return personModelFromJson(jsonEncode(res));
+      final jsonData = personModelFromJson(jsonEncode(res));
+      return jsonData;
     } catch (e) {
       log("getAllPersonsServices $e");
       rethrow;

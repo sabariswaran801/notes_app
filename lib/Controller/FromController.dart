@@ -13,12 +13,7 @@ class FormController extends GetxController {
   RxString gender = 'Male'.obs;
   RxString? qualification = "".obs;
   var isLoading = false.obs;
-  RxList<PersonModel> personData = <PersonModel>[].obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  final RxList<PersonModel> personData = <PersonModel>[].obs;
 
   Future<void> getAllPersonList() async {
     isLoading.value = true;
